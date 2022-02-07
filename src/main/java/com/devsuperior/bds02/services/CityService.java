@@ -17,11 +17,19 @@ public class CityService {
 	
 	@Autowired
 	private CityRepository repository;
-
+	
 	@Transactional(readOnly=true)
 	public List<CityDTO> findAll() {
 		List<City> list = repository.findAll(Sort.by("name"));
 		return list.stream().map(obj -> new CityDTO(obj)).collect(Collectors.toList());
+	}
+	
+	@Transactional
+	public CityDTO insert(CityDTO dto) {
+		City entity = new City();
+		entity.setName(dto.getName());
+		entity = repository.save(entity);
+		return new CityDTO(entity);
 	}
 
 }
